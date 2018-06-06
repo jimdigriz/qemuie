@@ -25,6 +25,7 @@ QEMU =  @echo 'user credentials are IEUser / Passw0rd!'; \
 		-vga qxl \
 		-boot c
 
+COMMA = ,
 define BROWSER_template
 ifeq ($(wildname $(1).qcow2),)
 $(1).zip $(1).md5.txt:: TIMECOND = -z $(1).qcow2
@@ -39,7 +40,7 @@ $(1).zip:
 $(1): $(1).qcow2
 	@echo "running '$(2)'"
 ifeq ($(1),msedge)
-	$(call QEMU,$(1),-drive file=/usr/share/OVMF/OVMF_CODE.fd,if=pflash,readonly -drive file=/usr/share/OVMF/OVMF_VARS.fd,if=pflash,readonly)
+	$(call QEMU,$(1),-drive file=/usr/share/OVMF/OVMF_CODE.fd$(COMMA)if=pflash$(COMMA)readonly -drive file=/usr/share/OVMF/OVMF_VARS.fd$(COMMA)if=pflash$(COMMA)readonly)
 else
 	$(call QEMU,$(1))
 endif
