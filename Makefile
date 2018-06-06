@@ -23,7 +23,8 @@ QEMU =  @echo 'user credentials are IEUser / Passw0rd!'; \
 		-device ich9-ahci,id=ahci \
 		-device ide-drive,drive=disk,bus=ahci.0 \
 		-net nic,model=e1000 \
-		-monitor stdio
+		-vga qxl \
+		-boot c
 
 define BROWSER_template
 ifeq ($(wildname $(1).qcow2),)

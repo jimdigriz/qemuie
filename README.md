@@ -2,7 +2,8 @@ Microsoft IE and Edge VMs for QEMU.
 
 ## Related Links
 
- * [Microsoft - Dev tools for the modern web - Virtual Machines](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
+ * [modern.IE](http://modern.ie)
+     * [Microsoft Development Virtual Machines](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
  * [cardi/qemu-windows-10](https://github.com/cardi/qemu-windows-10)
 
 # Preflight
