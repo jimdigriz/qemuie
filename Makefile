@@ -8,20 +8,19 @@ vms.json:
 	curl -fsSL -z $@ -o $@ $(VMS)
 
 QEMU =  @echo 'user credentials are IEUser / Passw0rd!'; \
-	nice -n 5 env TMPDIR=$$$$(pwd) QEMU_AUDIO_DRV=none qemu-system-x86_64 \
+	env TMPDIR=$$$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 		-machine type=q35,accel=kvm:tcg \
 		-m 2G -mem-prealloc \
 		-smp 4,sockets=1,cores=2,threads=2 \
 		-cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time \
 		-rtc clock=host,base=localtime \
 		-nodefaults -serial none -parallel none \
-		-usb -usbdevice tablet \
+		-usbdevice tablet \
 		-soundhw hda \
-		-drive file=/usr/share/OVMF/OVMF_CODE.fd,if=pflash,readonly \
-		-drive file=/usr/share/OVMF/OVMF_VARS.fd,if=pflash,readonly \
 		-drive file=$(1).qcow2,snapshot=on,cache=writethrough,if=none,l2-cache-size=8M,aio=native,cache.direct=on,id=disk \
 		-device ich9-ahci,id=ahci \
 		-device ide-drive,drive=disk,bus=ahci.0 \
+		$(2) \
 		-net nic,model=e1000 \
 		-vga qxl \
 		-boot c
@@ -39,7 +38,11 @@ $(1).zip:
 
 $(1): $(1).qcow2
 	@echo "running '$(2)'"
+ifeq ($(1),msedge)
+	$(call QEMU,$(1),-drive file=/usr/share/OVMF/OVMF_CODE.fd,if=pflash,readonly -drive file=/usr/share/OVMF/OVMF_VARS.fd,if=pflash,readonly)
+else
 	$(call QEMU,$(1))
+endif
 endef
 
 BROWSERS = $(shell cat vms.json | jq -r 'map(.name | split(" ") | .[0]) | reverse | unique | @tsv' | tr A-Z a-z)
