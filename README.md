@@ -18,13 +18,13 @@ Microsoft IE and Edge VMs for QEMU.
 ## Debian
 
     apt-get -yy install --no-install-recommends \
-	coreutils \
+    	coreutils \
     	curl \
     	jq \
     	make \
     	ovmf \
     	unzip \
-	util-linux \
+    	util-linux \
     	qemu-kvm \
     	qemu-system-x86 \
     	qemu-utils
