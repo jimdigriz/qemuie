@@ -2,4 +2,7 @@
 !.gitignore
 
 vms.json
+*.md5.txt
+*.zip
+*.vmdk
 *.qcow2
