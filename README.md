@@ -31,9 +31,11 @@ Microsoft IE and Edge VMs for QEMU.
 
 # Usage
 
-    make msedge
+You should run the following from a mountpoint with a lot of disk space (at least 20GiB):
+
+    make -f /path/to/qemuie/Makefile msedge
 
 Available targets are:
 
- * `ie{8,9,10,11}`: Internet Explorer
  * `msedge`: Edge
+ * `ie{8,9,10,11}`: Internet Explorer
