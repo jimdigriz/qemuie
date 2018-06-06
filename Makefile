@@ -21,7 +21,7 @@ QEMU =  @echo 'user credentials are IEUser / Passw0rd!'; \
 		-device ich9-ahci,id=ahci \
 		-device ide-drive,drive=disk,bus=ahci.0 \
 		$(2) \
-		-net nic,model=e1000 \
+		-net nic,model=e1000 -net user \
 		-vga qxl \
 		-boot c
 
