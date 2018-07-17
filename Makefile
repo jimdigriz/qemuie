@@ -2,13 +2,11 @@ CURL = curl -fL -C - --retry 3 -o $(2).tmp $(3) $(1) && mv $(2).tmp $(2)
 
 SPICE_SOCK = /run/user/$(shell id -u)/spice.qemuie.sock
 # hints from https://gist.github.com/francoism90/bff2630d8eb568d6f790
-ifneq ($(wildcard /usr/sbin/smbd),)
-QEMU_SMB = ,smb=share
-endif
 QEMU = env TMPDIR=$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 	-machine type=q35,accel=kvm:tcg \
 	-cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time \
-	-m 4G \
+	-m 2G \
+	-smp 4,sockets=1,cores=2,threads=2 \
 	-drive file=$(1).qcow2,snapshot=on,cache=writethrough,if=none,l2-cache-size=8M,aio=native,cache.direct=on,id=disk \
 	-drive file=virtio-win.iso,media=cdrom,id=cdrom \
 	-device ich9-ahci,id=ahci \
@@ -17,8 +15,7 @@ QEMU = env TMPDIR=$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 	-rtc clock=host,base=localtime \
 	-nodefaults -serial none -parallel none \
 	-soundhw hda \
-	-net user$(QEMU_SMB) \
-	-net nic,model=virtio \
+	-net user -net nic,model=virtio \
 	-balloon virtio \
 	-device usb-ehci,id=ehci -device usb-tablet,bus=ehci.0 \
 	-vga qxl \
@@ -96,3 +93,7 @@ FMT = vmdk
 .PHONY: spice
 spice:
 	spicy --uri="spice+unix://$(SPICE_SOCK)"
+
+.PHONY: http
+http:
+	python -m SimpleHTTPServer || php -S 127.0.0.1:8000 -t .
