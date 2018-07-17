@@ -46,9 +46,16 @@ endef
 ifneq ($(wildcard vms.json),)
 BROWSERS = $(shell cat vms.json | jq -r 'map(.name | split(" ") | .[0]) | unique | @tsv' | tr A-Z a-z)
 
-.PHONY: all
-all: vms.json
-	@$(foreach b, $(BROWSERS),printf "  %-18s - %s\\n" $(b) "start vm";)
+.PHONY: help
+help: vms.json
+	@printf "VMs:\n"
+	@$(foreach b, $(BROWSERS),printf "  %-30s - %s\n" $(b) 'start $(b)';)
+	@printf "\n"
+	@printf "Misc:\n"
+	@printf "  %-30s - %s\n" help 'this message'
+	@printf "  %-30s - %s\n" spice 'connect via spice client'
+	@printf "  %-30s - %s\n" http 'serve the local directory via http://0.0.0.0:8000 (requires Python or PHP)'
+	@printf "  %-30s - %s\n" spice-guest-tools-latest.exe 'download spice-guest-tools-latest.exe'
 
 $(foreach b, $(BROWSERS), \
 	$(eval s = $(shell cat vms.json | jq -r 'map(select(.name | test("^$(b)"; "i")))[-1]')) \

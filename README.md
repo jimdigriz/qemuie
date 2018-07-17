@@ -51,9 +51,16 @@ You should also download and install the [Windows Guest Tools](https://www.spice
 
 Other available targets can be found with `all` like so:
 
-    make -f /path/to/qemuie/Makefile all
-      ie10               - start vm
-      ie11               - start vm
-      ie8                - start vm
-      ie9                - start vm
-      msedge             - start vm
+    make -f /path/to/qemuie/Makefile
+    VMs:
+      ie10                           - start ie10
+      ie11                           - start ie11
+      ie8                            - start ie8
+      ie9                            - start ie9
+      msedge                         - start msedge
+    
+    Misc:
+      help                           - this message
+      spice                          - connect via spice client
+      http                           - serve the local directory via http://0.0.0.0:8000 (requires Python or PHP)
+      spice-guest-tools-latest.exe   - download spice-guest-tools-latest.exe
