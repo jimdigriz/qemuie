@@ -1,4 +1,4 @@
-CURL = curl -fL -o $(2).tmp $(3) $(1) && mv $(2).tmp $(2)
+CURL = curl -fL -C - --retry 3 -o $(2).tmp $(3) $(1) && mv $(2).tmp $(2)
 
 # hints from https://gist.github.com/francoism90/bff2630d8eb568d6f790
 ifneq ($(wildcard /usr/sbin/smbd),)
@@ -31,7 +31,7 @@ QEMU = env TMPDIR=$$$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 COMMA = ,
 define BROWSER_template
 $(1).md5.txt:
-	$$(call CURL,$(3),$$@)
+	$$(call CURL,$(3),$$@,--compressed)
 
 $(1).zip:
 	$$(call CURL,$(4),$$@)
@@ -69,11 +69,11 @@ endif
 
 vms.json: URL = https://developer.microsoft.com/en-us/microsoft-edge/api/tools/vms/
 vms.json:
-	$(call CURL,$(URL),$@)
+	$(call CURL,$(URL),$@,--compressed)
 
 virtio-win.iso: URL = https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso
 virtio-win.iso:
-	$(call CURL,$(URL))
+	$(call CURL,$(URL),$@,--compressed)
 
 NICE = nice -n 19 ionice -c 3
 FMT = vmdk
