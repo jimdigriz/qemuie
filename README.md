@@ -45,7 +45,11 @@ In another terminal use the following to get a terminal:
 
 You should open 'Device Manager' and 'Update Driver' by telling Windows to recurse into the directories of starting at `D:\` for all unknown devices as well as the 'Display adapter'.
 
-You should also download and install the [Windows Guest Tools](https://www.spice-space.org/download/windows/spice-guest-tools/spice-guest-tools-latest.exe).
+**N.B.** for Windows 10 you should 'Pause updates' otherwise the guest will spend its time at 100% cpu downloading updates for a VM destined for destruction.
+
+You should also download and install the [Windows Guest Tools](https://www.spice-space.org/download/windows/spice-guest-tools/spice-guest-tools-latest.exe).  You can call `make spice-guest-tools-latest.exe`.
+
+**N.B.** if you have samba installed, then a directory called `share` is created and its contents shared with the guest
 
 Other available targets can be found with `all` like so:
 

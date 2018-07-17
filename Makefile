@@ -3,7 +3,7 @@ CURL = curl -fL -C - --retry 3 -o $(2).tmp $(3) $(1) && mv $(2).tmp $(2)
 SPICE_SOCK = /run/user/$(shell id -u)/spice.qemuie.sock
 # hints from https://gist.github.com/francoism90/bff2630d8eb568d6f790
 ifneq ($(wildcard /usr/sbin/smbd),)
-QEMU_SMB = ,smb=$(HOME)
+QEMU_SMB = ,smb=share
 endif
 QEMU = env TMPDIR=$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 	-machine type=q35,accel=kvm:tcg \
@@ -17,7 +17,6 @@ QEMU = env TMPDIR=$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 	-rtc clock=host,base=localtime \
 	-nodefaults -serial none -parallel none \
 	-soundhw hda \
-	$(2) \
 	-net user$(QEMU_SMB) \
 	-net nic,model=virtio \
 	-balloon virtio \
@@ -27,7 +26,8 @@ QEMU = env TMPDIR=$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 	-chardev spicevmc,id=vdagent,debug=0,name=vdagent \
 	-device virtio-serial \
 	-device virtserialport,chardev=vdagent,name=com.redhat.spice.0 \
-	-boot c
+	-boot c \
+	$(2)
 
 COMMA = ,
 define BROWSER_template
@@ -74,6 +74,10 @@ vms.json:
 
 virtio-win.iso: URL = https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso
 virtio-win.iso:
+	$(call CURL,$(URL),$@,--compressed)
+
+spice-guest-tools-latest.exe: URL = https://www.spice-space.org/download/windows/spice-guest-tools/spice-guest-tools-latest.exe
+spice-guest-tools-latest.exe:
 	$(call CURL,$(URL),$@,--compressed)
 
 NICE = nice -n 19 ionice -c 3
