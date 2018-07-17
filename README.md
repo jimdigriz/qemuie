@@ -4,9 +4,9 @@ Microsoft IE and Edge VMs for QEMU.
 
  * [modern.IE](http://modern.ie)
      * [Microsoft Development Virtual Machines](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
- * [cardi/qemu-windows-10](https://github.com/cardi/qemu-windows-10)
-
-https://pve.proxmox.com/wiki/Qemu-guest-agent
+ * Windows on QEMU
+     * [cardi/qemu-windows-10](https://github.com/cardi/qemu-windows-10)
+     * [QEMU + Windows 10 x64 + KVM + IOMMU + AHCI + QXL & SPICE (as socket)](https://gist.github.com/francoism90/bff2630d8eb568d6f790)
 
 # Preflight
 

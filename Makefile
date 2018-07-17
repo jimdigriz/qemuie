@@ -1,7 +1,6 @@
 CURL = curl -fL -C - --retry 3 -o $(2).tmp $(3) $(1) && mv $(2).tmp $(2)
 
 SPICE_SOCK = /run/user/$(shell id -u)/spice.qemuie.sock
-# hints from https://gist.github.com/francoism90/bff2630d8eb568d6f790
 QEMU = env TMPDIR=$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 	-machine type=q35,accel=kvm:tcg \
 	-cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time \
