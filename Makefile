@@ -1,10 +1,9 @@
-CURL = curl -fL -o $(2) $(3) $(1)
-
-#ifneq ($(wildcard /usr/sbin/smbd),)
-#else
-#endif
+CURL = curl -fL -o $(2).tmp $(3) $(1) && mv $(2).tmp $(2)
 
 # hints from https://gist.github.com/francoism90/bff2630d8eb568d6f790
+ifneq ($(wildcard /usr/sbin/smbd),)
+QEMU_SMB = ,smb=$(HOME)
+endif
 QEMU = env TMPDIR=$$$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 	-machine type=q35,accel=kvm:tcg \
 	-cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time \
@@ -18,8 +17,7 @@ QEMU = env TMPDIR=$$$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 	-nodefaults -serial none -parallel none \
 	-soundhw hda \
 	$(2) \
-	-net user,id=nic \
-	-net user,id=nic,smb=$(HOME) \
+	-net user,id=nic$(QEMU_SMB) \
 	-net nic,model=virtio-net,netdev=nic \
 	-balloon virtio \
 	-device usb-ehci,id=ehci -device usb-tablet,bus=ehci.0 \
@@ -32,15 +30,11 @@ QEMU = env TMPDIR=$$$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 
 COMMA = ,
 define BROWSER_template
-ifneq ($(wildname $(1).qcow2),)
-$(1).zip $(1).md5.txt:: TIMECOND = -z $(1).qcow2
-endif
-
 $(1).md5.txt:
-	$$(call CURL,$(3),$$@,$$(TIMECOND))
+	$$(call CURL,$(3),$$@)
 
 $(1).zip:
-	$$(call CURL,$(4),$$@,$$(TIMECOND))
+	$$(call CURL,$(4),$$@)
 
 .PHONY: $(1)
 $(1): $(1).qcow2 virtio-win.iso
@@ -87,9 +81,9 @@ FMT = vmdk
 	test $$(cat $*.md5.txt | tr A-F a-f) = $$($(NICE) md5sum $*.zip | cut -b 1-32)
 	$(NICE) unzip -p $*.zip '*.box' \
 		| $(NICE) tar zxO --wildcards '*.$(FMT)' \
-		| $(NICE) cp --sparse=always /dev/stdin $@
+		| $(NICE) cp --sparse=always /dev/stdin $@.tmp
+	mv $@.tmp $@
 
 %.qcow2: %.$(FMT)
-	$(NICE) qemu-img convert -f $(FMT) -O qcow2 -o lazy_refcounts=on -t writethrough -c -p $< $@
-
-.DELETE_ON_ERROR:
+	$(NICE) qemu-img convert -f $(FMT) -O qcow2 -o lazy_refcounts=on -t writethrough -c -p $< $@.tmp
+	mv $@.tmp $@

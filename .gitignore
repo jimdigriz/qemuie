@@ -1,6 +1,8 @@
 .*
 !.gitignore
 
+*.tmp
+
 vms.json
 *.md5.txt
 *.zip
