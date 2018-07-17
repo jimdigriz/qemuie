@@ -47,7 +47,7 @@ You should open 'Device Manager' and 'Update Driver' by telling Windows to recur
 
 **N.B.** for Windows 10 you should 'Pause updates' otherwise the guest will spend its time at 100% cpu downloading updates for a VM destined for destruction.
 
-You should also download and install the [Windows Guest Tools](https://www.spice-space.org/download/windows/spice-guest-tools/spice-guest-tools-latest.exe).  You can call `make spice-guest-tools-latest.exe`.
+You should also download and install the [Windows Guest Tools](https://www.spice-space.org/download.html#windows-binaries) (you can call `make spice-guest-tools-latest.exe` to do this for you).
 
 Other available targets can be found with `all` like so:
 
@@ -61,6 +61,6 @@ Other available targets can be found with `all` like so:
     
     Misc:
       help                           - this message
-      spice                          - connect via spice client
+      spice                          - connect via SPICE client
       http                           - serve the local directory via http://0.0.0.0:8000 (requires Python or PHP)
       spice-guest-tools-latest.exe   - download spice-guest-tools-latest.exe

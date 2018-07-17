@@ -23,6 +23,7 @@ QEMU = env TMPDIR=$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 	-device virtio-serial \
 	-device virtserialport,chardev=vdagent,name=com.redhat.spice.0 \
 	-boot c \
+	-monitor stdio \
 	$(2)
 
 COMMA = ,
