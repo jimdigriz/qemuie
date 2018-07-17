@@ -6,6 +6,8 @@ Microsoft IE and Edge VMs for QEMU.
      * [Microsoft Development Virtual Machines](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
  * [cardi/qemu-windows-10](https://github.com/cardi/qemu-windows-10)
 
+https://pve.proxmox.com/wiki/Qemu-guest-agent
+
 # Preflight
 
  * coreutils (for `nice`) and `util-linux` (for `ionice`)
@@ -24,6 +26,7 @@ Microsoft IE and Edge VMs for QEMU.
     	jq \
     	make \
     	ovmf \
+	spice-client-gtk \
     	unzip \
     	util-linux \
     	qemu-kvm \
@@ -35,6 +38,14 @@ Microsoft IE and Edge VMs for QEMU.
 You should run the following from a mountpoint with a lot of disk space (at least 20GiB):
 
     make -f /path/to/qemuie/Makefile msedge
+
+In another terminal use the following to get a terminal:
+
+    make -f /path/to/qemuie/Makefile spice
+
+You should open 'Device Manager' and 'Update Driver' by telling Windows to recurse into the directories of starting at `D:\` for all unknown devices as well as the 'Display adapter'.
+
+You should also download and install the [Windows Guest Tools](https://www.spice-space.org/download/windows/spice-guest-tools/spice-guest-tools-latest.exe).
 
 Other available targets can be found with `all` like so:
 
