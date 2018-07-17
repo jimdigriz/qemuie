@@ -53,7 +53,7 @@ endif
 endef
 
 ifneq ($(wildcard vms.json),)
-BROWSERS = $(shell cat vms.json | jq -r 'map(.name | split(" ") | .[0]) | reverse | unique | @tsv' | tr A-Z a-z)
+BROWSERS = $(shell cat vms.json | jq -r 'map(.name | split(" ") | .[0]) | unique | @tsv' | tr A-Z a-z)
 
 .PHONY: all
 all: vms.json

@@ -36,7 +36,11 @@ You should run the following from a mountpoint with a lot of disk space (at leas
 
     make -f /path/to/qemuie/Makefile msedge
 
-Available targets are:
+Other available targets can be found with `all` like so:
 
- * `msedge`: Edge
- * `ie{8,9,10,11}`: Internet Explorer
+    make -f /path/to/qemuie/Makefile all
+      ie10               - start vm
+      ie11               - start vm
+      ie8                - start vm
+      ie9                - start vm
+      msedge             - start vm
