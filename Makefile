@@ -83,11 +83,11 @@ vms.json:
 
 virtio-win.iso: URL = https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso
 virtio-win.iso:
-	$(call CURL,$(URL),$@,--compressed)
+	$(call CURL,$(URL),$@,--compressed -C -)
 
 spice-guest-tools-latest.exe: URL = https://www.spice-space.org/download/windows/spice-guest-tools/spice-guest-tools-latest.exe
 spice-guest-tools-latest.exe:
-	$(call CURL,$(URL),$@,--compressed)
+	$(call CURL,$(URL),$@,--compressed -C -)
 
 NICE = nice -n 19 ionice -c 3
 FMT = vmdk
