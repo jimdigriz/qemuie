@@ -4,6 +4,7 @@ Microsoft IE and Edge VMs for QEMU.
 
  * [modern.IE](http://modern.ie)
      * [Microsoft Development Virtual Machines](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
+ * [Windows 10 development environment](https://developer.microsoft.com/en-us/windows/downloads/virtual-machines)
  * Windows on QEMU
      * [cardi/qemu-windows-10](https://github.com/cardi/qemu-windows-10)
      * [QEMU + Windows 10 x64 + KVM + IOMMU + AHCI + QXL & SPICE (as socket)](https://gist.github.com/francoism90/bff2630d8eb568d6f790)
@@ -35,7 +36,7 @@ Microsoft IE and Edge VMs for QEMU.
 
 # Usage
 
-You should run the following from a mountpoint with a lot of disk space (at least 20GiB):
+You should run the following from a mountpoint with a lot of disk space (at least 20GiB, 50GiB if you plan to use the development environment):
 
     make -f /path/to/qemuie/Makefile msedge
 
@@ -58,6 +59,8 @@ Other available targets can be found with `all` like so:
       ie8                            - start ie8
       ie9                            - start ie9
       msedge                         - start msedge
+    
+      dev                            - start development environment
     
     Misc:
       help                           - this message
