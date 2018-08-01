@@ -1,3 +1,6 @@
+NICE = nice -n 19 ionice -c 3
+FMT = vmdk
+
 CURL = curl -fL -C - --retry 3 -o $(2).tmp $(3) $(1) && mv $(2).tmp $(2)
 
 SPICE_SOCK = /run/user/$(shell id -u)/spice.qemuie.sock
@@ -99,8 +102,6 @@ spice-guest-tools-latest.exe: URL = https://www.spice-space.org/download/windows
 spice-guest-tools-latest.exe:
 	$(call CURL,$(URL),$@,--compressed -C -)
 
-NICE = nice -n 19 ionice -c 3
-FMT = vmdk
 %.$(FMT): %.md5.txt %.zip
 	test $$(cat $*.md5.txt | tr A-F a-f) = $$($(NICE) md5sum $*.zip | cut -b 1-32)
 	$(NICE) unzip -p $*.zip '*.box' \
