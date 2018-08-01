@@ -40,13 +40,15 @@ You should run the following from a mountpoint with a lot of disk space (at leas
 
     make -f /path/to/qemuie/Makefile msedge
 
+This will drop you onto the [QEMU monitor](https://en.wikibooks.org/wiki/QEMU/Monitor).
+
 In another terminal use the following to get a terminal:
 
     make -f /path/to/qemuie/Makefile spice
 
 You should open 'Device Manager' and 'Update Driver' by telling Windows to recurse into the directories of starting at `D:\` for all unknown devices as well as the 'Display adapter'.
 
-**N.B.** for Windows 10 you should 'Pause updates' otherwise the guest will spend its time at 100% cpu downloading updates for a VM destined for destruction.
+**N.B.** for Windows 10 you should 'Pause updates' otherwise the guest will spend its time spinning the CPU at 100% whilst downloading updates for a VM destined for destruction.
 
 You should also download and install the [Windows Guest Tools](https://www.spice-space.org/download.html#windows-binaries) (you can call `make spice-guest-tools-latest.exe` to do this for you).
 
