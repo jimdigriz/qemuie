@@ -28,8 +28,11 @@ QEMU = env TMPDIR=$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 
 COMMA = ,
 define BROWSER_template
+$(1).md5.txt:
+	$$(call CURL,$(3),$$@,--compressed)
+
 $(1).zip:
-	$$(call CURL,$(3),$$@)
+	$$(call CURL,$(4),$$@)
 
 .PHONY: $(1)
 $(1): $(1).qcow2 virtio-win.iso
@@ -61,8 +64,9 @@ $(foreach b, $(BROWSERS), \
 	$(eval s = $(shell cat vms.json | jq -r 'map(select(.name | test("^$(b)"; "i")))[-1]')) \
 	$(eval f = $(shell echo '$(s)' | jq -r '.software[] | select(.name == "Vagrant") | .files[] | select(.name | test("\\.zip$$"))')) \
 	$(eval n = $(shell echo '$(s)' | jq -r '.name')) \
+	$(eval m = $(shell echo '$(f)' | jq -r '.md5')) \
 	$(eval u = $(shell echo '$(f)' | jq -r '.url')) \
-	$(eval $(call BROWSER_template,$(b),$(n),$(u))) \
+	$(eval $(call BROWSER_template,$(b),$(n),$(m),$(u))) \
 )
 else
 .PHONY: $(MAKECMDGOALS)
@@ -72,6 +76,12 @@ endif
 
 windev_VM_virtualbox.zip:
 	$(call CURL,https://aka.ms/windev_VM_virtualbox,$@,-C -)
+
+windev_VM_virtualbox.$(FMT): windev_VM_virtualbox.zip
+	$(NICE) unzip -p $*.zip '*.ova' \
+		| $(NICE) tar xO --wildcards '*.$(FMT)' \
+		| $(NICE) cp --sparse=always /dev/stdin $@.tmp
+	mv $@.tmp $@
 
 .PHONY: dev
 dev: windev_VM_virtualbox.qcow2 virtio-win.iso
@@ -91,9 +101,10 @@ spice-guest-tools-latest.exe:
 
 NICE = nice -n 19 ionice -c 3
 FMT = vmdk
-%.$(FMT): %.zip
-	$(NICE) unzip -p $*.zip '*.box' '*.ova' \
-		| $(NICE) tar xO --wildcards '*.$(FMT)' \
+%.$(FMT): %.md5.txt %.zip
+	test $$(cat $*.md5.txt | tr A-F a-f) = $$($(NICE) md5sum $*.zip | cut -b 1-32)
+	$(NICE) unzip -p $*.zip '*.box' \
+		| $(NICE) tar zxO --wildcards '*.$(FMT)' \
 		| $(NICE) cp --sparse=always /dev/stdin $@.tmp
 	mv $@.tmp $@
 
