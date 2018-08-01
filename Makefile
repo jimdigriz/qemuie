@@ -93,7 +93,7 @@ NICE = nice -n 19 ionice -c 3
 FMT = vmdk
 %.$(FMT): %.zip
 	$(NICE) unzip -p $*.zip '*.box' '*.ova' \
-		| $(NICE) tar zxO --wildcards '*.$(FMT)' \
+		| $(NICE) tar xO --wildcards '*.$(FMT)' \
 		| $(NICE) cp --sparse=always /dev/stdin $@.tmp
 	mv $@.tmp $@
 
