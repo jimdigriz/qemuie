@@ -71,11 +71,11 @@ $(MAKECMDGOALS): vms.json
 endif
 
 windev_VM_virtualbox.zip:
-	$(call CURL,https://aka.ms/windev_VM_virtualbox,$@)
+	$(call CURL,https://aka.ms/windev_VM_virtualbox,$@,-C -)
 
 .PHONY: dev
 dev: windev_VM_virtualbox.qcow2 virtio-win.iso
-	$(call QEMU,windev_VM_virtualbox,-C -)
+	$(call QEMU,windev_VM_virtualbox)
 
 vms.json: URL = https://developer.microsoft.com/en-us/microsoft-edge/api/tools/vms/
 vms.json:
