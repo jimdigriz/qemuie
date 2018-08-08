@@ -3,7 +3,7 @@ FMT = vmdk
 
 CURL = curl -fL -C - --retry 3 -o $(2).tmp $(3) $(1) && mv $(2).tmp $(2)
 
-SPICE_SOCK = /run/user/$(shell id -u)/spice.qemuie.sock
+SPICE_SOCK = /tmp/spice.qemuie.sock
 QEMU = env TMPDIR=$$(pwd) QEMU_AUDIO_DRV=none nice -n 5 qemu-system-x86_64 \
 	-machine type=q35,accel=kvm:tcg \
 	-cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time \
@@ -72,6 +72,10 @@ $(foreach b, $(BROWSERS), \
 	$(eval $(call BROWSER_template,$(b),$(n),$(m),$(u))) \
 )
 else
+.PHONY: help
+help: vms.json
+	$(MAKE) -f $(lastword $(MAKEFILE_LIST)) $(MAKECMDGOALS)
+
 .PHONY: $(MAKECMDGOALS)
 $(MAKECMDGOALS): vms.json
 	$(MAKE) -f $(lastword $(MAKEFILE_LIST)) $(MAKECMDGOALS)
@@ -81,7 +85,7 @@ windev_VM_virtualbox.zip:
 	$(call CURL,https://aka.ms/windev_VM_virtualbox,$@,-C -)
 
 windev_VM_virtualbox.$(FMT): windev_VM_virtualbox.zip
-	$(NICE) unzip -p $*.zip '*.ova' \
+	$(NICE) unzip -p $< '*.ova' \
 		| $(NICE) tar xO --wildcards '*.$(FMT)' \
 		| $(NICE) cp --sparse=always /dev/stdin $@.tmp
 	mv $@.tmp $@
