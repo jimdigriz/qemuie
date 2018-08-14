@@ -89,6 +89,7 @@ windev_VM_virtualbox.$(FMT): windev_VM_virtualbox.zip
 		| $(NICE) tar xO --wildcards '*.$(FMT)' \
 		| $(NICE) cp --sparse=always /dev/stdin $@.tmp
 	mv $@.tmp $@
+.INTERMEDIATE: windev_VM_virtualbox.$(FMT)
 
 .PHONY: dev
 dev: windev_VM_virtualbox.qcow2 virtio-win.iso
