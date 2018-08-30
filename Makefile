@@ -71,14 +71,14 @@ $(foreach b, $(BROWSERS), \
 	$(eval u = $(shell echo '$(f)' | jq -r '.url')) \
 	$(eval $(call BROWSER_template,$(b),$(n),$(m),$(u))) \
 )
-else
-.PHONY: help
-help: vms.json
-	$(MAKE) -f $(lastword $(MAKEFILE_LIST)) $(MAKECMDGOALS)
 
 .PHONY: dev
 dev: windev_VM_virtualbox.qcow2 virtio-win.iso
 	$(call QEMU,windev_VM_virtualbox)
+else
+.PHONY: help
+help: vms.json
+	$(MAKE) -f $(lastword $(MAKEFILE_LIST)) $(MAKECMDGOALS)
 
 .PHONY: $(MAKECMDGOALS)
 $(MAKECMDGOALS): vms.json
