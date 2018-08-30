@@ -76,6 +76,10 @@ else
 help: vms.json
 	$(MAKE) -f $(lastword $(MAKEFILE_LIST)) $(MAKECMDGOALS)
 
+.PHONY: dev
+dev: windev_VM_virtualbox.qcow2 virtio-win.iso
+	$(call QEMU,windev_VM_virtualbox)
+
 .PHONY: $(MAKECMDGOALS)
 $(MAKECMDGOALS): vms.json
 	$(MAKE) -f $(lastword $(MAKEFILE_LIST)) $(MAKECMDGOALS)
@@ -90,10 +94,6 @@ windev_VM_virtualbox.$(FMT): windev_VM_virtualbox.zip
 		| $(NICE) cp --sparse=always /dev/stdin $@.tmp
 	mv $@.tmp $@
 .INTERMEDIATE: windev_VM_virtualbox.$(FMT)
-
-.PHONY: dev
-dev: windev_VM_virtualbox.qcow2 virtio-win.iso
-	$(call QEMU,windev_VM_virtualbox)
 
 vms.json: URL = https://developer.microsoft.com/en-us/microsoft-edge/api/tools/vms/
 vms.json:
